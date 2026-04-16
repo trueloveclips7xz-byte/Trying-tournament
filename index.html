@@ -3,47 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meri Pehli App</title>
+    <title>Bhai Ki App</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
-        .box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: inline-block; }
-        input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 80%; margin-bottom: 10px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px; background-color: #f0f2f5; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block; min-width: 300px; }
+        h2 { color: #1a73e8; }
+        input { padding: 12px; border: 2px solid #ddd; border-radius: 8px; width: 80%; margin-bottom: 20px; font-size: 16px; }
+        input:focus { border-color: #1a73e8; outline: none; }
+        button { padding: 12px 25px; background-color: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #1557b0; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>🚀 Firebase Database Test</h2>
-        <input type="text" id="nameInput" placeholder="Apna Naam Likho">
+
+    <div class="container">
+        <h2>🚀 Firebase x GitHub</h2>
+        <p>Apna naam database mein bhejo:</p>
+        <input type="text" id="userInput" placeholder="Yahan naam likho...">
         <br>
-        <button id="sendBtn">Database mein Save Karo</button>
+        <button id="submitBtn">Data Bhejo</button>
     </div>
 
     <script type="module">
+        // Firebase ke modules load ho rahe hain
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // ↓↓↓ BHAI, YAHAN APNA CONFIG DALNA HAI ↓↓↓
+        // TERA FULL CONFIG CODE
         const firebaseConfig = {
-            // Jo code tune Firebase se copy kiya tha (apiKey wala), 
-            // uske andar ki saari lines yahan chipka do.
+            apiKey: "AIzaSyBnKUy5cCGm5fnGKlghs7_3H_qRIWybWnA",
+            authDomain: "trying-firebase-6fb52.firebaseapp.com",
+            databaseURL: "https://trying-firebase-6fb52-default-rtdb.firebaseio.com",
+            projectId: "trying-firebase-6fb52",
+            storageBucket: "trying-firebase-6fb52.firebasestorage.app",
+            messagingSenderId: "1049276999250",
+            appId: "1:1049276999250:web:919e7522516b1b627da18b"
         };
-        // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
+        // Firebase Initialize
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        document.getElementById("sendBtn").onclick = function() {
-            const name = document.getElementById("nameInput").value;
-            if(name) {
-                push(ref(db, 'users/'), { username: name })
-                .then(() => alert("Mubarak ho bhai! Data Firebase mein chala gaya!"))
-                .catch((error) => alert("Error: " + error));
+        // Click Event
+        document.getElementById("submitBtn").onclick = function() {
+            const nameValue = document.getElementById("userInput").value;
+            
+            if(nameValue.trim() !== "") {
+                // Database mein 'entries' naam ke table mein data jaayega
+                push(ref(db, 'entries/'), {
+                    name: nameValue,
+                    timestamp: new Date().getTime()
+                })
+                .then(() => {
+                    alert("Shabaash! Database mein entry ho gayi. 🔥");
+                    document.getElementById("userInput").value = "";
+                })
+                .catch((error) => {
+                    alert("Kuch gadbad hai: " + error.message);
+                });
             } else {
-                alert("Pehle naam toh likho!");
+                alert("Naam toh likh bhai!");
             }
-        }
+        };
     </script>
 </body>
 </html>
-
